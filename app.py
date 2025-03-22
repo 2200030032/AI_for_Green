@@ -7,9 +7,7 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
-from xgboost import XGBRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-
 
 # ✅ Load Dataset with Error Handling
 @st.cache_data
@@ -22,7 +20,6 @@ def load_data():
     df.replace([np.inf, -np.inf], np.nan, inplace=True)
     df.dropna(inplace=True)
     return df
-
 
 # ✅ Define Sustainability Tips
 def get_sustainability_tips(total_emission):
@@ -49,7 +46,6 @@ def get_sustainability_tips(total_emission):
             "🏡 **Promote local green initiatives** and awareness."
         ]
 
-
 # ✅ Train Model & Predict Emissions
 def train_and_predict(df, country, model_type):
     country_df = df[df["Country"] == country]
@@ -66,8 +62,6 @@ def train_and_predict(df, country, model_type):
         model = LinearRegression()
     elif model_type == "Random Forest":
         model = RandomForestRegressor(n_estimators=100, random_state=42)
-    elif model_type == "XGBoost":
-        model = XGBRegressor(n_estimators=100, random_state=42)
     else:
         return None, None, None
 
@@ -83,7 +77,6 @@ def train_and_predict(df, country, model_type):
     r2 = r2_score(y_test, y_pred)
 
     return future_emission, mae, r2
-
 
 # ✅ Main Streamlit UI
 def main():
@@ -115,7 +108,7 @@ def main():
         country_selected = st.selectbox("Choose a Country", countries)
 
         st.markdown("## 🔍 Select Model")
-        model_selected = st.selectbox("Choose a Model", ["Linear Regression", "Random Forest", "XGBoost"])
+        model_selected = st.selectbox("Choose a Model", ["Linear Regression", "Random Forest"])
 
         st.markdown("---")
         st.markdown("**🌱 Reduce Your Carbon Footprint & Save the Planet!**")
@@ -155,26 +148,11 @@ def main():
         if future_emission:
             st.warning(f"🔮 **Predicted Emissions ({latest_year + 1}): {future_emission:.2f} MtCO2**")
 
-    # ✅ Display Accuracy Metrics
-    if future_emission:
-        st.markdown("### 🔍 Model Performance")
-        st.write(f"📌 **Mean Absolute Error (MAE):** {mae:.2f}")
-        st.write(f"📌 **R² Score:** {r2:.2f}")
-
     # ✅ Display Sustainability Tips
     st.markdown("### 🌱 Sustainability Tips to Reduce Emissions")
     tips = get_sustainability_tips(future_emission if future_emission else latest_emission)
-
     for tip in tips:
         st.markdown(f"- {tip}")
 
-    # 🚀 Call to Action
-    st.markdown(
-        "<h3 style='text-align: center; color: #2E7D32;'>🌎 Act Now! Every Action Counts for a Greener Planet! 🌱</h3>",
-        unsafe_allow_html=True)
-
-#python -m streamlit run app.py
-
 if __name__ == "__main__":
     main()
-#
