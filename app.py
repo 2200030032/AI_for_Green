@@ -14,7 +14,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 # ✅ Load Dataset with Error Handling
 @st.cache_data
 def load_data():
-    file_path = "dataset/GCB2022v27_MtCO2_flat.csv"
+    file_path = "GCB2022v27_MtCO2_flat.csv"
     if not os.path.exists(file_path):
         st.error(f"Dataset file '{file_path}' not found! Please check the file location.")
         return None
